@@ -37,15 +37,12 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Weather.getData(latitude: "50.064651", longitude: "19.944981", completion:{ (results:[Weather]?) in
-            
+        Weather.fetch(latitude: "50.064651", longitude: "19.944981", completion:{ (results:[Weather]?) in
             if let weatherData = results {
                 self.data = weatherData
-                
                 DispatchQueue.main.async {
                     self.reloadData(i: 0)
                 }
-                
             }
         })
         pageControl.numberOfPages = daysDisplayed
@@ -55,7 +52,7 @@ class ViewController: UIViewController {
         self.displayDate(unixtimeInterval: self.data[i].timeStamp)
         self.weatherType.text = self.data[i].weatherType
         self.maxTemp.text = String(self.data[i].maxTemp)
-        self.rainfall.text = String(self.data[i].rainfall)
+        self.rainfall.text = String(self.data[i].rain)
         self.pressure.text = String(self.data[i].pressure)
         self.minTemp.text = String(self.data[i].minTemp)
         self.windSpeed.text = String(self.data[i].windSpeed)

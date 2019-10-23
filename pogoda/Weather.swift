@@ -16,12 +16,22 @@ struct Weather {
     let minTemp:Double
     let windSpeed:Double
     let windDirection:Double
-    let rainfall:Double
+    let rain:Double
     let pressure:Double
     let icon:String
     let timeStamp:Double
     
     init(json:[String:Any]) {
+        self.windDirection = json["windBearing"] as! Double
+        
+        self.rain = json["precipIntensity"] as! Double
+        
+        self.pressure = json["pressure"] as! Double
+        
+        self.icon = json["icon"] as! String
+        
+        self.timeStamp = json["time"] as! Double
+        
         self.weatherType = json["summary"] as! String
         
         self.maxTemp = json["temperatureMax"] as! Double
@@ -29,24 +39,15 @@ struct Weather {
         self.minTemp = json["temperatureMin"] as! Double
         
         self.windSpeed = json["windSpeed"] as! Double
-        
-        self.windDirection = json["windBearing"] as! Double
-        
-        self.rainfall = json["humidity"] as! Double
-        
-        self.pressure = json["pressure"] as! Double
-        
-        self.icon = json["icon"] as! String
-        
-        self.timeStamp = json["time"] as! Double
     }
 
     
-    static func getData (latitude: String, longitude: String, completion: @escaping ([Weather]?) -> ()) {
+    static func fetch (latitude: String, longitude: String, completion: @escaping ([Weather]?) -> ()) {
         
-        let API_PATH = "https://api.darksky.net/forecast/573bffb42f1bdd32f31f40b1571b01c2/"
+        let API = "https://api.darksky.net/forecast/573bffb42f1bdd32f31f40b1571b01c2/"
         
-        let url = API_PATH + "\(latitude),\(longitude)?exclude=currently,minutely,hourly&units=si"
+        let url = API + "\(latitude),\(longitude)?exclude=minutely,hourly,currently&units=si"
+        
         let request = URLRequest(url: URL(string: url)!)
         
         let task = URLSession.shared.dataTask(with: request) { (data:Data?, response:URLResponse?, error:Error?) in
